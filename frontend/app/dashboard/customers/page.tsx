@@ -192,9 +192,9 @@ export default function CitizensPage() {
         selectedWoreda === "all" || (customer.woreda && customer.woreda.name === selectedWoreda);
       const searchMatch =
         customer.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        customer.ID_No.toLowerCase().includes(searchText.toLowerCase()) || // Allow searching by ID_No
-        customer.phone.toLowerCase().includes(searchText.toLowerCase()) || // Allow searching by Phone
-        (customer.retailerCooperativeShop?.name || "").toLowerCase().includes(searchText.toLowerCase()); // Search by shop name
+        // customer.ID_No.toLowerCase().includes(searchText.toLowerCase()) || // Allow searching by ID_No
+        customer.phone.toLowerCase().includes(searchText.toLowerCase())  // Allow searching by Phone
+        // (customer.retailerCooperativeShop?.name || "").toLowerCase().includes(searchText.toLowerCase()); // Search by shop name
 
       const shopMatch =
         userRole === "RetailerCooperativeShop"
@@ -326,7 +326,7 @@ export default function CitizensPage() {
       "Phone",
       "Ketena",
       "Family number",
-      "shop",
+      // "shop",
     ];
 
     const rows = sortedAndFilteredCustomers.map((customer: any, index: number) => {
@@ -342,7 +342,7 @@ export default function CitizensPage() {
         customer.phone,
         customer.ketena,
         customer.numberOfFamilyMembers,
-        customer.retailerCooperativeShop.name,
+        // customer.retailerCooperativeShop.name,
       ];
       return row;
     });

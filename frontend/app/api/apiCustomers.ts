@@ -126,3 +126,17 @@ export async function getCustomerById(token: any, customerId: string) {
     throw error;
   }
 }
+
+export async function getCustomerByPhone(token: any, phone: string) {
+  try {
+    const res = await api.get(`/customers/phone/${phone}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error(`Error fetching customer by ID ${phone}:`, error);
+    throw error;
+  }
+}

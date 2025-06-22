@@ -260,8 +260,8 @@ export default function DashboardLayout({
           roles: [
             "SubCityOffice",
             "WoredaOffice",
-            "RetailerCooperativeShop",
-            "RetailerCooperative",
+            // "RetailerCooperativeShop",
+            // "RetailerCooperative",
             "TradeBureau",
           ],
         },

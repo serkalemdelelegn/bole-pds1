@@ -10,7 +10,7 @@ const transactionSchema = new mongoose.Schema(
     },
     customerIDNumber: {
       type: String,
-      required: [true, 'Customer id number field is required']
+      // required: [true, 'Customer id number field is required']
     },
     customerId: {
       type: mongoose.Schema.Types.ObjectId,
