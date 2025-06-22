@@ -4,7 +4,15 @@ const SubCityOffice = require("./subCityOfficeModel");
 const TradeBureau = require("./tradeBureauModel");
 const RetailerCooperative = require("./retailerCooperativeModel");
 const RetailerCooperativeShop = require("./retailerCooperativeShopModel");
-const sendEmail = require("../utils/email");
+
+// Conditional email import to prevent crashes
+let sendEmail;
+try {
+  sendEmail = require("../utils/email");
+} catch (error) {
+  console.warn("Email utility not available:", error.message);
+  sendEmail = () => Promise.reject(new Error("Email functionality not available"));
+}
 
 const alertSchema = new mongoose.Schema(
   {
