@@ -31,7 +31,7 @@ app.use(express.json());
 
 // CORS
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:4000", "http://localhost:4001", "http://49.12.106.102"], // your frontend origins
+  origin: ["http://localhost:4000", "http://localhost:4001", "http://49.12.106.102"], // your frontend origins
   credentials: true,               // allow cookies to be sent
 }));
 

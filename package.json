@@ -5,13 +5,6 @@
     "frontend",
     "backend"
   ],
-  "scripts": {
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:backend": "cd backend && npm start",
-    "dev:frontend": "cd frontend && npm run dev",
-    "build": "cd frontend && npm run build",
-    "start": "cd frontend && npm start"
-  },
   "dependencies": {
     "@tanstack/react-query": "^5.77.2",
     "axios": "^1.9.0",
@@ -29,7 +22,6 @@
     "zustand": "^5.0.5"
   },
   "devDependencies": {
-    "@tanstack/react-query-devtools": "^5.76.1",
-    "concurrently": "^8.2.2"
+    "@tanstack/react-query-devtools": "^5.76.1"
   }
 }
