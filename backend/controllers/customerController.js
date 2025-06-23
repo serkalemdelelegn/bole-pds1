@@ -6,10 +6,10 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
 const customerPopOptions = [
-  {
-    path: "retailerCooperativeShop",
-    select: "name",
-  },
+  // {
+  //   path: "retailerCooperativeShop",
+  //   select: "name",
+  // },
   { path: "woreda", select: "name" },
 ];
 exports.createCustomer = factory.createOne(Customer);
@@ -32,6 +32,21 @@ exports.getCustomerByShop = async (req, res) => {
     res.status(400).json({ status: "fail", message: error.message });
   }
 };
+
+exports.getCustomerByPhone = catchAsync(async (req, res, next) => {
+  console.log('hayy')
+  const customer = await Customer.findOne({ phone: req.params.phone }).populate(
+    customerPopOptions
+  );
+  if (!customer) {
+    return next(new AppError("Customer not found", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {customer},
+  });
+});
 
 // verify customer
 exports.verifyCustomer = async (req, res) => {

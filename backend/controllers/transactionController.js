@@ -6,17 +6,17 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
 exports.createTransaction = catchAsync(async (req, res, next) => {
-  const { shopId, commodity, amount, customerIDNumber } = req.body;
+  const { shopId, commodity, amount, customerIDNumber, phone } = req.body;
 
   const customer = await Customer.findOne(
-    { ID_No: customerIDNumber },
+    { phone: phone },
     "status purchasedCommodities lastTransactionDate"
   );
 
   if (!customer) return next(new AppError("Customer not found", 404));
 
-  if (customer.retailerCooperativeShop._id.toString() !== shopId)
-    return next(new AppError("ይህ ደንበኛ ከዚ ሱቅ መግዛት አይችልም።", 401));
+  // if (customer.retailerCooperativeShop._id.toString() !== shopId)
+  //   return next(new AppError("ይህ ደንበኛ ከዚ ሱቅ መግዛት አይችልም።", 401));
 
   // Reset status if 20 days passed
   if (customer.lastTransactionDate) {
@@ -25,7 +25,7 @@ exports.createTransaction = catchAsync(async (req, res, next) => {
     );
     if (diffInDays >= 20) {
       await Customer.updateOne(
-        { ID_No: customerIDNumber },
+        { phone },
         { status: "available", purchasedCommodities: [] }
       );
       customer.status = "available";
@@ -69,7 +69,7 @@ exports.createTransaction = catchAsync(async (req, res, next) => {
       { $inc: { "availableCommodity.$.quantity": -amount } }
     ),
     Customer.updateOne(
-      { ID_No: customerIDNumber },
+      { phone },
       {
         $push: { purchasedCommodities: commodity },
         lastTransactionDate: new Date(),

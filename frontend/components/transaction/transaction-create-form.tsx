@@ -18,7 +18,7 @@ import { createTransaction } from "@/app/api/apiTransactions";
 import { toast } from "react-toastify";
 import { getUserById } from "@/app/api/auth/apiUsers";
 import { decodeJWT } from "@/app/api/auth/decode";
-import { getCustomerById } from "@/app/api/apiCustomers";
+import { getCustomerByPhone } from "@/app/api/apiCustomers";
 import {
   getRetailerCooperativeById,
   getRetailerCooperatives,
@@ -33,7 +33,7 @@ export default function TransactionCreateForm({
 }) {
   const { t } = useTranslation();
   const [userRole, setUserRole] = useState<string | null>(null);
-  const [customerIDNumber, setCustomerIDNumber] = useState("ID0");
+  const [customerPhone, setCustomerPhone] = useState("");
   const [customerId, setCustomerId] = useState("");
   const [name, setName] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
@@ -74,55 +74,56 @@ export default function TransactionCreateForm({
   });
 
   const handleSearchCustomer = async () => {
-    if (!customerIDNumber) {
-      toast.error("Please enter a Customer ID Number to search.");
-      return;
-    }
-    setSearching(true);
-    try {
-      const token = localStorage.getItem("token") || "";
-      const res = await getCustomerById(token, customerIDNumber);
-      if (res && res.data) {
-        setCustomerId(res.data.customer._id || "");
-        setName(res.data.customer.name || "");
-        setHouseNumber(res.data.customer.house_no || "");
-        setWoreda(res.data.customer.woreda.name || "");
-      } else {
-        toast.error("Customer not found.");
+      if (!customerPhone) {
+        toast.error("Please enter a Customer phone number to search.");
+        return;
+      }
+      setSearching(true);
+      try {
+        const token = localStorage.getItem("token") || "";
+        const res = await getCustomerByPhone(token, customerPhone);
+        if (res && res.data) {
+          setCustomerId(res.data.customer._id || "");
+          setName(res.data.customer.name || "");
+          setHouseNumber(res.data.customer.house_no || "");
+          setWoreda(res.data.customer.woreda.name || "");
+        } else {
+          toast.error("Customer not found.");
+          setCustomerId("");
+          setName("");
+          setHouseNumber("");
+          setWoreda("");
+        }
+      } catch (error) {
+        console.log(error)
+        toast.error("Error fetching customer data.");
         setCustomerId("");
         setName("");
         setHouseNumber("");
         setWoreda("");
+      } finally {
+        setSearching(false);
       }
-    } catch (error) {
-      toast.error("Error fetching customer data.");
-      setCustomerId("");
-      setName("");
-      setHouseNumber("");
-      setWoreda("");
-    } finally {
-      setSearching(false);
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    if (!customerIDNumber || !commodity || !amount) {
-      setError("Please fill all required fields.");
-      return;
-    }
+          if (!customerPhone || !commodity || !amount) {
+            setError("Please fill all required fields.");
+            return;
+          }
 
     setLoading(true);
     try {
-      const payload = {
-        shopId: userDataResult?.data?.worksAt,
-        customerIDNumber,
-        customerId,
-        commodity,
-        amount: Number(amount),
-      };
+        const payload = {
+          shopId: userDataResult?.data?.worksAt,
+          phone: customerPhone,
+          customerId,
+          commodity,
+          amount: Number(amount),
+        };
 
       // console.log("Transaction Payload:", payload);
       const res = await createTransaction(
@@ -153,12 +154,12 @@ export default function TransactionCreateForm({
       {/* Customer ID Number with search button */}
       <div className="flex items-center space-x-2">
         <div className="flex-1">
-          <Label htmlFor="customerIDNumber">{t("customerIDNumber")}</Label>
+          <Label htmlFor="customerPhone">{t("customerPhone")}</Label>
           <Input
-            id="customerIDNumber"
-            value={customerIDNumber}
-            onChange={(e) => setCustomerIDNumber(e.target.value)}
-            placeholder="Enter Customer ID Number"
+            id="customerPhone"
+            value={customerPhone}
+            onChange={(e) => setCustomerPhone(e.target.value)}
+            placeholder="Enter Customer Phone Number"
             autoComplete="off"
           />
         </div>

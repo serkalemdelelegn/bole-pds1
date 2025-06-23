@@ -11,6 +11,7 @@ const {
   getCustomersByWoredaOffice,
   getCustomerByShop,
   getCustomersByRetailerCooperative,
+  getCustomerByPhone,
 } = require("../controllers/customerController");
 const checkPermission = require("../middleware/checkPermission");
 const auth = require("../middleware/auth");
@@ -27,7 +28,12 @@ router.get(
   getCustomerByShop
 );
 // router.get('/id/:IDNumber', auth, checkPermission('getCustomerByIDNumber'), getCustomerByIDNumber);// ADD THE PERMISSION
-router.get('/id/:IDNumber', auth,checkPermission('getCustomerByIDNumber'), getCustomerByIDNumber);// ADD THE PERMISSION
+router.get(
+  "/id/:IDNumber",
+  auth,
+  checkPermission("getCustomerByIDNumber"),
+  getCustomerByIDNumber
+); // ADD THE PERMISSION
 router.patch("/:id", auth, checkPermission("updateCustomer"), updateCustomer);
 router.delete("/:id", auth, checkPermission("deleteCustomer"), deleteCustomer);
 router.patch(
@@ -49,6 +55,12 @@ router.get(
   auth,
   // checkPermission("getCustomersByWoredaOffice"),
   getCustomersByRetailerCooperative
+);
+router.get(
+  "/phone/:phone",
+  auth,
+  // checkPermission("getCustomerByPhone"),
+  getCustomerByPhone
 );
 
 module.exports = router;
